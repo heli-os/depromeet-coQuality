@@ -9,6 +9,7 @@ import com.depromeet.coquality.outer.comment.adapter.driving.web.request.CreateC
 import com.depromeet.coquality.outer.comment.adapter.driving.web.request.UpdateCommentRequest;
 import com.depromeet.coquality.outer.comment.adapter.driving.web.response.CommentResponse;
 import com.depromeet.coquality.outer.comment.adapter.driving.web.response.CommentsResponse;
+import com.depromeet.coquality.outer.common.vo.ApiResponse;
 import com.depromeet.coquality.outer.interceptor.Auth;
 import com.depromeet.coquality.outer.resolver.UserId;
 import java.util.List;
@@ -43,11 +44,11 @@ public class CommentController {
 
     @PutMapping("/comments/{commentId}")
     @Auth
-    public CommentResponse updateComment(@PathVariable final Long commentId,
-                                         @Valid @RequestBody final UpdateCommentRequest updateCommentRequest,
-                                         @UserId final Long userId) {
+    public ApiResponse<CommentResponse> updateComment(@PathVariable final Long commentId,
+                                     @Valid @RequestBody final UpdateCommentRequest updateCommentRequest,
+                                     @UserId final Long userId) {
         final Comment updatedComment = updateCommentUseCase.execute(commentId, updateCommentRequest.toCommentDto(userId));
-        return CommentResponse.from(commentId, updatedComment);
+        return ApiResponse.success(CommentResponse.from(commentId, updatedComment));
     }
 
     @DeleteMapping("/posts/{postId}/comments/{commentId}")
